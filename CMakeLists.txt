@@ -234,11 +234,14 @@ SET(SRCS
   Src/PhysEffects/EarthAtmosphereModel.cpp
   Src/Missions/Ascent2-Integr.cpp
   Src/Missions/Ascent2-Ret1.cpp
+  Src/Missions/Ascent21b-Integr.cpp
+  Src/Missions/Ascent21b-Close.cpp
   Src/Missions/RTLS1-Integr.cpp)
 
 IF (NOMAD_FOUND)
   LIST(APPEND SRCS
     Src/Missions/Ascent2-Opt.cpp
+    Src/Missions/Ascent21b-Opt.cpp
     Src/Missions/RTLS1-Opt.cpp
     Src/Missions/RTLS1-Landing.cpp)
 ENDIF()
@@ -276,7 +279,8 @@ SET(SB_TESTS
   MkZhukovskyMesh
   LinAlgTuplesTest
   RKF5Test
-  EarthAtmosphereTest)
+  EarthAtmosphereTest
+  Ascent21bTest)
 
 # The GMSH-based mesh test; CMake has no FindGMSH, so the header and the
 # library are looked up directly. NB: GMSH is GPL-2.0-or-later; it is linked
@@ -295,6 +299,7 @@ ENDIF()
 IF (NOMAD_FOUND)
   LIST(APPEND SB_TESTS
     AscentTest
+    Ascent21bOptTest
     RTLSTest)
 ENDIF()
 
