@@ -47,6 +47,27 @@ namespace SpaceBallistics
   }
 
   //=========================================================================//
+  // GAST - ERA: minus the Equation of the Origins (IERS 2010, 5.30-5.32):   //
+  //=========================================================================//
+  // The accumulated precession in RA (GMST - ERA, consistent with the P03
+  // precession of "MkPrecMtx"), plus the Equation of the Equinoxes:
+  // dPsi * cos(eps), an ANGLE here, as GAST is (not "/ 15", which is for an
+  // arc-sec to sec-of-time conversion). XXX: Its complementary terms (up to
+  // ~2.6 mas) are not included:
+  //
+  constexpr Angle EarthRotationModel::MkGASTMinusERA
+    (double a_T, Angle a_dpsi, double a_cosEps)
+  {
+    double T = a_T;
+    Angle  precRA =
+      To_Angle(0.014506_arcSec +
+              (4612.156534_arcSec + (1.3915817_arcSec + (-0.00000044_arcSec +
+              (-0.000029956_arcSec - 0.0000000368_arcSec * T) * T) * T) * T)
+              * T);
+    return precRA + a_dpsi * a_cosEps;
+  }
+
+  //=========================================================================//
   // Nutation Matrices as Functions of d(Psi) and d(Eps):                    //
   //=========================================================================//
   constexpr std::pair<Mtx33,double> EarthRotationModel::MkNutMtx
@@ -372,9 +393,9 @@ namespace SpaceBallistics
                 (Tmp(i,j), (i==j) ? 1.0 : 0.0));
     )
     //-----------------------------------------------------------------------//
-    // An Approximate Equation of the Origins Ee = ERA - GAST:               //
+    // GAST - ERA = -(Equation of the Origins):                              //
     //-----------------------------------------------------------------------//
-    m_Ee     = dPsi  *  cosEps / 15.0;
+    m_Ee     = MkGASTMinusERA(T, dPsi, cosEps);
     m_DeltaT = GetDeltaT(m_ermEpoch);
 
     // All Done!
@@ -423,9 +444,9 @@ namespace SpaceBallistics
                 (Tmp(i,j), (i==j) ? 1.0 : 0.0));
     )
     //-----------------------------------------------------------------------//
-    // An Approximate Equation of the Origins Ee = ERA - GAST:               //
+    // GAST - ERA = -(Equation of the Origins):                              //
     //-----------------------------------------------------------------------//
-    m_Ee     = dPsi  * cosEps / 15.0;
+    m_Ee     = MkGASTMinusERA(T, dPsi, cosEps);
     m_DeltaT = GetDeltaT(m_ermEpoch);
 
     // All Done!

@@ -50,7 +50,7 @@ namespace SpaceBallistics
     // r_[CRS_Epoch] = invPN * r_GCRS:
     Mtx33     m_invPN;
 
-    // The Equation of the Origins: Ee = ERA - GAST:
+    // GAST - ERA, ie minus the Equation of the Origins (const over a Model):
     Angle     m_Ee;
 
     // DeltaT = TT - UT1:
@@ -212,6 +212,10 @@ namespace SpaceBallistics
     // Earth Nutation Matrix, via Nutation Angles. Also returns Cos(eps):
     constexpr static std::pair<Mtx33,double> MkNutMtx
       (double a_T, Angle a_dpsi, Angle a_deps);
+
+    // GAST - ERA, from the Precession in RA and the Equation of the Equinoxes:
+    constexpr static Angle MkGASTMinusERA
+      (double a_T, Angle a_dpsi, double a_cosEps);
 
     // DeltaT = TT - UT1:
     constexpr static Time GetDeltaT(Time_jyr a_t);

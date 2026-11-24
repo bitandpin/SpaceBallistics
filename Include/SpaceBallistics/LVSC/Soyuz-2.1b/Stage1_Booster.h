@@ -67,8 +67,13 @@ namespace SpaceBallistics
     static_assert(S2::OxidTankUp.GetLow()[0] == S2::OxidTankLow.GetUp()[0]);
     constexpr static Len      AttH   = 0.08_m;
     constexpr static Len      TopX   = S2::OxidTankUp.GetLow()[0] - AttH;
-    constexpr static Len      TopR   =
-      S2::MaxD + (S2::MinD - S2::MaxD) * double(AttH / S2::MidTrCH);
+    // NB: "S2::MaxD" and "S2::MinD" are DIAMETERS, hence the 0.5 (it was
+    // missing: "TopR" was 2.934 m, the Boosters ~1.5 m off Stage2). Check:
+    // ОВОС "Марафон IoT" (2022), Fig. 2, view A: 5322.2 mm between the axes
+    // of opposite Boosters at their tails, ie 2.661 m off the OX axis (here,
+    // with "H" and "Alpha": 2.592 m):
+    constexpr static Len      TopR   = 0.5 *
+      (S2::MaxD + (S2::MinD - S2::MaxD) * double(AttH / S2::MidTrCH));
     constexpr static Len      TopY   = TopR * CosPsi;
     constexpr static Len      TopZ   = TopR * SinPsi;
 

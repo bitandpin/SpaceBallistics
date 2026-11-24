@@ -435,6 +435,18 @@ namespace SpaceBallistics::DE440T
       a_pos->GetArr(),
       a_vel != nullptr ? a_vel->GetArr() : nullptr
     );
+
+    // NB: "GetCoOrds" fills ONLY the co-ordinate array. We must also stamp the
+    // TimeStamps (otherwise they remain "UnDef"/NaN, and any subsequent TS
+    // unification, eg in a vector subtraction, would blow up an assertion):
+    a_pos->GetCOSTS() = a_tdb;
+    a_pos->GetVecTS() = a_tdb;
+
+    if (a_vel != nullptr)
+    {
+      a_vel->GetCOSTS() = a_tdb;
+      a_vel->GetVecTS() = a_tdb;
+    }
   }
 
   //-------------------------------------------------------------------------//
@@ -490,6 +502,17 @@ namespace SpaceBallistics::DE440T
       a_vel->x() = velEMB[0] - mu * velM[0];
       a_vel->y() = velEMB[1] - mu * velM[1];
       a_vel->z() = velEMB[2] - mu * velM[2];
+    }
+
+    // NB: Same as in the generic case: stamp the TimeStamps so they are no
+    // longer "UnDef"/NaN (see the comment in the generic GetPlanetBarEqPV):
+    a_pos->GetCOSTS() = a_tdb;
+    a_pos->GetVecTS() = a_tdb;
+
+    if (a_vel != nullptr)
+    {
+      a_vel->GetCOSTS() = a_tdb;
+      a_vel->GetVecTS() = a_tdb;
     }
   }
 

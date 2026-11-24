@@ -129,6 +129,11 @@ namespace SpaceBallistics
     // access to the COS TimeStamp. USE IT WITH EXTREME CARE!
     constexpr TS& GetCOSTS()       { return m_cosTS;  }
 
+    // NB: The same writable access is needed for the Vec (velocity) TimeStamp,
+    // eg by "DE440T::GetPlanetBarEqPV" which fills the co-ordinate ARRAY only
+    // and must therefore stamp the (otherwise UnDef/NaN) TimeStamps explicitly:
+    constexpr TS& GetVecTS()       { return m_vecTS;  }
+
     //-----------------------------------------------------------------------//
     // Vector Space Operations:                                              //
     //-----------------------------------------------------------------------//
