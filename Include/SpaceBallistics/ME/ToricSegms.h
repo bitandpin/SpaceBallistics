@@ -107,6 +107,11 @@ namespace SpaceBallistics
     //=======================================================================//
     constexpr std::pair<Len,Vel> PropLevelOfVol(Vol a_v, VolRate a_v_dot) const;
 
+    // Major and Minor Radii and Orientation (as in "SpherSegm"):
+    constexpr Len  GetMajorR () const { return m_Q;        }
+    constexpr Len  GetMinorR () const { return m_R;        }
+    constexpr bool IsFacingUp() const { return m_facingUp; }
+
   private:
     //-----------------------------------------------------------------------//
     // For the Low-Facing "ToricSegm":                                       //

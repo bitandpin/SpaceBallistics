@@ -24,6 +24,8 @@ namespace SpaceBallistics
     Mass                  m_fullMass;     // Curr full mass of a Stage
     Mass                  m_fuelMass;     // Curr mass of Fuel;     info only
     Mass                  m_oxidMass;     // Curr mass of Oxidiser; info only
+    Mass                  m_h2o2Mass;     // Curr mass of H2O2;     info only
+    Mass                  m_liqN2Mass;    // Curr mass of Liquid N2; info only
     MassRate              m_fullMassDot;  // Full Mass Time Derivative
     PosVEmb    <LVSCKind> m_com;          // Curr center of masses (x,  y,  z)
     VelVEmb    <LVSCKind> m_comDots;      // CoM  Embedded "Velocity"

@@ -140,6 +140,10 @@ namespace SpaceBallistics
     //
     constexpr std::pair<Len,Vel> PropLevelOfVol(Vol a_v, VolRate a_v_dot) const;
 
+    // Base Radii (Low = Smaller-X, Up = Larger-X):
+    constexpr Len GetLowR() const { return m_rh / RS::GetHeight(); }
+    constexpr Len GetUpR () const { return GetLowR() + m_deltaR;   }
+
     //=======================================================================//
     // MoI Components for the Propellant of Given Level:                     //
     //=======================================================================//
@@ -280,6 +284,10 @@ namespace SpaceBallistics
     // Propellant Volume -> Propellant Level:                                //
     //=======================================================================//
     constexpr std::pair<Len,Vel> PropLevelOfVol(Vol a_v, VolRate a_v_dot) const;
+
+    // Sphere Radius and Orientation (the Base is at the Low end if Up-facing):
+    constexpr Len  GetSphereR() const { return m_R;        }
+    constexpr bool IsFacingUp() const { return m_facingUp; }
 
   private:
     //-----------------------------------------------------------------------//

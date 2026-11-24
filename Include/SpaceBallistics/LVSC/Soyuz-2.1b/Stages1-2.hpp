@@ -220,8 +220,8 @@ namespace SpaceBallistics
            !(IsPos(fuelMassDot) || IsPos(oxidMassDot) || IsPos(h2o2MassDot) ||
              IsPos(liqN2MassDot)));
 
-    // XXX: "h2o2Mass" is not returned to the CallER; it is only used in the
-    // MoIs and CoM computations below...
+    // NB: "h2o2Mass" and "liqN2Mass" are returned to the CallER for info only;
+    // they are mainly used in the MoIs and CoM computations below...
 
     //-----------------------------------------------------------------------//
     // Thrust Vector:                                                        //
@@ -489,6 +489,8 @@ namespace SpaceBallistics
       .m_fullMass    = fullMass,
       .m_fuelMass    = fuelMass,
       .m_oxidMass    = oxidMass,
+      .m_h2o2Mass    = h2o2Mass,
+      .m_liqN2Mass   = liqN2Mass,
       .m_fullMassDot = fullME.GetMassDot(),
       .m_com         = fullME.GetCoM    (),
       .m_comDots     = fullME.GetCoMDots(),

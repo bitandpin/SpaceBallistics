@@ -212,6 +212,8 @@ namespace SpaceBallistics
       .m_fullMass    = fullMass,
       .m_fuelMass    = fuelMass,
       .m_oxidMass    = oxidMass,
+      .m_h2o2Mass    = Mass(0.0),    // Stage3 carries no H2O2
+      .m_liqN2Mass   = Mass(0.0),    // ... and no Liquid N2
       .m_fullMassDot = fullMassDot,
       .m_com         = fullME.GetCoM    (),
       .m_comDots     = fullME.GetCoMDots(),
