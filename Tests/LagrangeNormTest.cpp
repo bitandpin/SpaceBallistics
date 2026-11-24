@@ -3,7 +3,8 @@
 //                       "Tests/LagrangeNormTest.cpp":                       //
 //  Test the Normalisation Coeffs of Associated Lagrange Polynomials in GSL  //
 //===========================================================================//
-#include "DimTypes/Bits/Macros.h"
+#include "DimTypes/DeclareDims.h"
+#include "DimTypes/CompilerMacros.h"
 #include <gsl/gsl_sf_legendre.h>
 #include <iostream>
 #include <cassert>

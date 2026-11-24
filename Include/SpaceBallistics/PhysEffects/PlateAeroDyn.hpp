@@ -95,7 +95,7 @@ namespace SpaceBallistics
       // The Lift Coeff @ M=0 is 2*Pi*alpha; for M > 0, compressibility effects
       // are treated using the von Karman -- Tsien approximation:
       //
-      double cL0 = TwoPi<double> * double(alpha);
+      double cL0 = TwoPi<double> * alpha.Magnitude();
       double s   = SqRt(1.0 - M2);
       double cL  = cL0 / (s - 0.5 * M2 * cL0 / (1.0 + s));
 
@@ -183,7 +183,7 @@ namespace SpaceBallistics
       // this model would not be applicable. But to be on a safe side,
       // set M=10 as the upper bound for the root search:
       //
-      double z   = nu(M)  +  double(alpha);
+      double z   = nu(M)  +  alpha.Magnitude();
       auto   nu0 = [z, &nu] (double a_M) -> double { return nu(a_M) - z; };
       double Mup = Dichotomy(nu0, M, 10.0,  DefaultTol<double>);
       assert(Mup > M);

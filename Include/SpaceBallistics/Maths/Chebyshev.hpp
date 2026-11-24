@@ -5,14 +5,14 @@
 //===========================================================================//
 #pragma  once
 
-#include <DimTypes/Bits/CEMaths.hpp>
-#include <DimTypes/Bits/Macros.h>
+#include <DimTypes/CEMaths.hpp>
+#include <DimTypes/DeclareDims.h>
 #include <type_traits>
 #include <cassert>
 
 namespace SpaceBallistics::Chebyshev
 {
-  using namespace DimTypes::Bits::CEMaths;
+  using namespace DimTypes::CEMaths;
 
   //=========================================================================//
   //  T(n, x):                                                               //

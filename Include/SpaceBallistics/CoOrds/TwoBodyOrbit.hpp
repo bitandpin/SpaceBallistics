@@ -186,7 +186,7 @@ namespace SpaceBallistics
         // For a RectLin orbit, "I" and "Omega" can also be defined, as Euler's
         // Angles of the radius-vector. But in this case, we may get I < 0:
         m_I     = Angle(ASin(double(a_pos.z() / r)));
-        assert(-PI_2 <= m_I && m_I <= PI/2);
+        assert(-PI_2 <= m_I && m_I <= PI_2);
         m_Omega = Angle(ATan2(a_pos.y(), a_pos.x()));
 
         // In this case, "m_l0" is undefined, because there is no Ascending No-
@@ -368,7 +368,7 @@ namespace SpaceBallistics
 
         // The Mean Anomaly / Kepler's Equation analogue (works for the Rect-
         // Hyperbolic orbit as well):
-        m_M0 = Angle(m_e * SinH(double(m_E0))) - m_E0;
+        m_M0 = Angle(m_e * SinH(m_E0.Magnitude())) - m_E0;
         break;
       }
       //-----------------------//
@@ -388,7 +388,7 @@ namespace SpaceBallistics
         assert(-PI < m_f0 && m_f0 < PI);
 
         // The Mean Anomaly analogue  (consistent with "m_n" defined above):
-        m_M0 = m_E0 * (1.0 + Sqr(double(m_E0)) / 3.0);
+        m_M0 = m_E0 * (1.0 + Sqr(m_E0.Magnitude()) / 3.0);
         break;
       }
       //-----------------------//
@@ -399,7 +399,7 @@ namespace SpaceBallistics
         m_E0 = Angle(SqRt(2.0 * double(r / 1.0_km)));
         if (!movingAway)
           m_E0 = - m_E0;
-        m_M0 = Angle(Cube(double(m_E0)));  // (consistent with "m_n" above)
+        m_M0 = Angle(Cube(m_E0.Magnitude()));  // (consistent with "m_n" above)
         m_f0 = PI;
         break;
       }

@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
       DE440T::GetEarthNutations(tdb, nuts);
 
       printf("%.2lf\t%.16e\t%.16e\n",
-             tdb.GetJD().Magnitude(), double(nuts[0]), double(nuts[1]));
+             tdb.GetJD().Magnitude(), nuts[0].Magnitude(), nuts[1].Magnitude());
     }
     else
     if (isLibr)
@@ -87,8 +87,8 @@ int main(int argc, char* argv[])
 
       printf("%.2lf\t%.16e\t%.16e\t%.16e\t%.16e\t%.16e\t%.16e\n",
              tdb.GetJD().Magnitude(),
-             double(librs[0]),        double(librs[1]),
-             double(librs[2]),
+             librs[0].Magnitude(),   librs[1].Magnitude(),
+             librs[2].Magnitude(),
              librDots[0].Magnitude(), librDots[1].Magnitude(),
              librDots[2].Magnitude());
     }

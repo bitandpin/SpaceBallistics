@@ -61,9 +61,25 @@ SET(GSL_LIBS "gsl" "openblas")
 # Boost (no specific version checks):
 FIND_PACKAGE(Boost  REQUIRED)
 
-# XXX: For NOMAD, we currently need an explicit location:
-SET(NOMAD_DIR  "/opt/NOMAD/4.5.0")
-SET(NOMAD_LIBS "nomadAlgos" "nomadUtils" "nomadEval")
+# NOMAD needs an explicit location, as it ships no CMake config file: its
+# install prefix is given by "-DNOMAD_DIR=..." or the NOMAD_DIR environment
+# variable; the default is "/opt/NOMAD/4.5.0":
+#
+SET(NOMAD_DIR "" CACHE PATH "NOMAD install directory (default: /opt/NOMAD/4.5.0)")
+IF (NOT NOMAD_DIR AND DEFINED ENV{NOMAD_DIR})
+  SET(NOMAD_DIR "$ENV{NOMAD_DIR}")
+ENDIF()
+IF (NOT NOMAD_DIR)
+  SET(NOMAD_DIR "/opt/NOMAD/4.5.0")
+ENDIF()
+IF (NOMAD_DIR AND EXISTS "${NOMAD_DIR}/include/nomad")
+  SET(NOMAD_FOUND TRUE)
+  SET(NOMAD_LIBS "nomadAlgos" "nomadUtils" "nomadEval")
+  MESSAGE(STATUS "NOMAD found at ${NOMAD_DIR}")
+ELSE()
+  SET(NOMAD_FOUND FALSE)
+  MESSAGE(STATUS "NOMAD NOT found — skipping mission optimisation")
+ENDIF()
 
 #=============================================================================#
 # Compiler Settings:                                                          #
@@ -192,12 +208,15 @@ SET(CMAKE_SKIP_BUILD_RPATH         FALSE)
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 
 INCLUDE_DIRECTORIES("${CMAKE_SOURCE_DIR}/Include"
-                    "${DIMTYPES_TOP_DIR}/Include"
-                    "${NOMAD_DIR}/include/nomad")
+                    "${DIMTYPES_TOP_DIR}/Include")
 
 LINK_DIRECTORIES   ("${CMAKE_BINARY_DIR}"
-                    "${LIB_DIR}"
-                    "${NOMAD_DIR}/lib64")
+                    "${LIB_DIR}")
+
+IF (NOMAD_FOUND)
+  INCLUDE_DIRECTORIES("${NOMAD_DIR}/include/nomad")
+  LINK_DIRECTORIES   ("${NOMAD_DIR}/lib64")
+ENDIF()
 
 #=============================================================================#
 # The Target Library:                                                         #
@@ -214,17 +233,24 @@ SET(SRCS
   Src/PhysEffects/EarthRotationModel.cpp
   Src/PhysEffects/EarthAtmosphereModel.cpp
   Src/Missions/Ascent2-Integr.cpp
-  Src/Missions/Ascent2-Opt.cpp
   Src/Missions/Ascent2-Ret1.cpp
-  Src/Missions/RTLS1-Integr.cpp
-  Src/Missions/RTLS1-Opt.cpp
-  Src/Missions/RTLS1-Landing.cpp)
+  Src/Missions/RTLS1-Integr.cpp)
+
+IF (NOMAD_FOUND)
+  LIST(APPEND SRCS
+    Src/Missions/Ascent2-Opt.cpp
+    Src/Missions/RTLS1-Opt.cpp
+    Src/Missions/RTLS1-Landing.cpp)
+ENDIF()
 
 ADD_LIBRARY          (${PROJECT_NAME} STATIC ${SRCS})
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
-                      ${NOMAD_LIBS}
                       ${OPENMP_LIBS})
+
+IF (NOMAD_FOUND)
+  TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${NOMAD_LIBS})
+ENDIF()
 
 #=============================================================================#
 # Tests:                                                                      #
@@ -248,18 +274,36 @@ SET(SB_TESTS
   TransLunarTest
   PlateAeroDynTest
   MkZhukovskyMesh
-  MkSoyuz21bMesh
   LinAlgTuplesTest
   RKF5Test
-  EarthAtmosphereTest
-  AscentTest
-  RTLSTest)
+  EarthAtmosphereTest)
+
+# The GMSH-based mesh test; CMake has no FindGMSH, so the header and the
+# library are looked up directly. NB: GMSH is GPL-2.0-or-later; it is linked
+# into this test only, never into the library:
+FIND_PATH   (GMSH_INCLUDE_DIR gmsh.h)
+FIND_LIBRARY(GMSH_LIBRARY     gmsh)
+IF (GMSH_INCLUDE_DIR AND GMSH_LIBRARY)
+  SET(GMSH_FOUND TRUE)
+  LIST(APPEND SB_TESTS MkSoyuz21bMesh)
+  MESSAGE(STATUS "GMSH found at ${GMSH_LIBRARY}: MkSoyuz21bMesh enabled")
+ELSE()
+  SET(GMSH_FOUND FALSE)
+  MESSAGE(STATUS "GMSH NOT found: skipping MkSoyuz21bMesh")
+ENDIF()
+
+IF (NOMAD_FOUND)
+  LIST(APPEND SB_TESTS
+    AscentTest
+    RTLSTest)
+ENDIF()
 
 FOREACH(SB_TEST ${SB_TESTS})
   ADD_EXECUTABLE         (${SB_TEST} Tests/${SB_TEST}.cpp)
   TARGET_LINK_LIBRARIES  (${SB_TEST} ${PROJECT_NAME} ${GSL_LIBS})
 
   IF (${SB_TEST} STREQUAL "MkSoyuz21bMesh")
-    TARGET_LINK_LIBRARIES(${SB_TEST} "gmsh")
+    TARGET_INCLUDE_DIRECTORIES(${SB_TEST} PRIVATE "${GMSH_INCLUDE_DIR}")
+    TARGET_LINK_LIBRARIES     (${SB_TEST} "${GMSH_LIBRARY}")
   ENDIF()
 ENDFOREACH(SB_TEST)

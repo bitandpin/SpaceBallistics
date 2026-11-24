@@ -129,8 +129,8 @@ namespace
       (
         [pM, eM, omegaM, p, e, omega](Angle a_l) -> LenK
         {
-          return p  * (1.0 + eM * Cos(double(a_l - omegaM))) -
-                 pM * (1.0 + e  * Cos(double(a_l - omega )));
+          return p  * (1.0 + eM * Cos((a_l - omegaM).Magnitude())) -
+                 pM * (1.0 + e  * Cos((a_l - omega ).Magnitude()));
         },
         omega,   lQ,  Angle(1e-8)
       );

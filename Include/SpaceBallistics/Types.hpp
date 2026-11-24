@@ -161,53 +161,6 @@ namespace SpaceBallistics
 }
 // End namespace SpaceBallistics
 
-namespace DimTypes
-{
-  namespace SB = SpaceBallistics;
-
-  //-------------------------------------------------------------------------//
-  // Explicit conversions of "Angle[_rad]" into "double":                    //
-  //-------------------------------------------------------------------------//
-  // XXX: This function is in the form of "operator double", and therefore, it
-  // must be defined in the same namespace ("DimTypes") as the original "DimQ"s:
-  //
-  template<>
-  constexpr inline
-  DimQ
-  <
-    SB::DimQ_Encs::DimExp(unsigned(SB::DimsE::Angle)),
-    SB::DimQ_Encs::MkUnit(unsigned(SB::DimsE::Angle), 0), // 0=rad: fund unit
-    SB::DimQ_RepT,
-    SB::DimQ_MaxDims
-  >
-  ::operator double() const 
-  {
-    using ThisDimQ = std::remove_cv_t<std::remove_reference_t<decltype(*this)>>;
-    static_assert(std::is_same_v<ThisDimQ, SB::Angle_rad>);
-    return double(SB::To_DimLess(*this));
-  }
-
-  //-------------------------------------------------------------------------//
-  // Similarly, converting "Angle_deg" into "double", via "Angle" (rad):     //
-  //-------------------------------------------------------------------------//
-  template<>
-  constexpr inline
-  DimQ
-  <
-    SB::DimQ_Encs::DimExp(unsigned(SB::DimsE::Angle)),
-    SB::DimQ_Encs::MkUnit(unsigned(SB::DimsE::Angle), 1), // 1=deg
-    SB::DimQ_RepT,
-    SB::DimQ_MaxDims
-  >
-  ::operator double() const
-  {
-    using ThisDimQ = std::remove_cv_t<std::remove_reference_t<decltype(*this)>>;
-    static_assert(std::is_same_v<ThisDimQ, SB::Angle_deg>);
-    return double(SB::To_Angle(*this));
-  }
-}
-// End namespace DimTypes
-
 //===========================================================================//
 // Support for using "std::format" with our "DimQ"s:                         //
 //===========================================================================//

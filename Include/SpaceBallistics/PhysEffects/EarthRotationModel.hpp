@@ -368,7 +368,7 @@ namespace SpaceBallistics
       Mtx33 Tmp  = m_PN * m_invPN;
       for (int i = 0; i < 3; ++i)
       for (int j = 0; j < 3; ++j)
-        assert(DimTypes::Bits::CEMaths::ApproxEqual
+        assert(DimTypes::CEMaths::ApproxEqual
                 (Tmp(i,j), (i==j) ? 1.0 : 0.0));
     )
     //-----------------------------------------------------------------------//
@@ -419,7 +419,7 @@ namespace SpaceBallistics
       Mtx33 Tmp = m_PN * m_invPN;
       for (int i = 0; i < 3; ++i)
       for (int j = 0; j < 3; ++j)
-        assert(DimTypes::Bits::CEMaths::ApproxEqual
+        assert(DimTypes::CEMaths::ApproxEqual
                 (Tmp(i,j), (i==j) ? 1.0 : 0.0));
     )
     //-----------------------------------------------------------------------//

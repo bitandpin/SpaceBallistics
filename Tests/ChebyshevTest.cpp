@@ -15,7 +15,7 @@ int main(int argc, char const* argv[])
 {
   using namespace std;
   using namespace SpaceBallistics;
-  using namespace DimTypes::Bits::CEMaths;
+  using namespace DimTypes::CEMaths;
 
   //-------------------------------------------------------------------------//
   // Initialisation:                                                         //

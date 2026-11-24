@@ -331,7 +331,7 @@ const
   LenK  h1  = r1 - R;
   VelK  Vr1 = a_nse.m_Vr;
   Time  t1  = a_nse.m_t;
-  LenK  LS  = R * double(a_nse.m_phi);
+  LenK  LS  = R * a_nse.m_phi.Magnitude();
 
   // The Curr LV Mass (via a synthetic "s1"):
   StateV s1    { r1, Vr1, AngVel(0.0), a_nse.m_spentPropMass, a_nse.m_phi };
@@ -583,7 +583,7 @@ const
   VelK     VhorEnd   = rEnd * omegaEnd / 1.0_rad;
   auto     VEnd2     = Sqr(VrEnd) + Sqr(VhorEnd);
   Mass     mEnd      = ToDer()->LVMass(a_sT, a_T);
-  LenK     lEnd      = R * double(phiEnd);
+  LenK     lEnd      = R * phiEnd.Magnitude();
 
   Pressure maxQ      = ToDer()->m_maxQ;
   Pressure sepQ      = ToDer()->m_sepQ;
@@ -613,7 +613,7 @@ const
 
   // Radial and Horizontal Acceleration:
   AccK     accRadEnd   = r2DotEnd - rEnd * Sqr(omegaEnd / 1.0_rad);
-  AccK     accHorEnd   = (rEnd * omegaDotEnd + 2 * VrEnd * omegaEnd) / 1.0_rad;
+  AccK     accHorEnd   = (rEnd * omegaDotEnd + 2.0 * VrEnd * omegaEnd) / 1.0_rad;
 
   // Total Final Acceleration:
   AccK     accEnd      = SqRt(Sqr(accRadEnd) + Sqr(accHorEnd));

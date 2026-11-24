@@ -35,7 +35,7 @@ namespace SpaceBallistics::LVAeroDyn
     if (a_M < 0.0 || std::fabs(Sin(a_AoA)) > 0.4)
       throw std::invalid_argument
             ("cD: Invalid M=" + std::to_string(a_M) + " or AoA=" +
-             std::to_string(double(a_AoA)));
+             std::to_string(a_AoA.Magnitude()));
 
     double cD0  = 0.0;
 
@@ -84,7 +84,7 @@ namespace SpaceBallistics::LVAeroDyn
     // Now include the quadratic dependency on the AoA. The quadratic coeff is
     // typically 2..4; we use 3:
     assert(cD0 >= 0.0);
-    return cD0 * (1.0 + 3.0 * Sqr(double(a_AoA)));
+    return cD0 * (1.0 + 3.0 * Sqr(a_AoA.Magnitude()));
   }
 
   //=========================================================================//
@@ -96,7 +96,7 @@ namespace SpaceBallistics::LVAeroDyn
     if (a_M < 0.0 || std::fabs(Sin(a_AoA)) > 0.4)
       throw std::invalid_argument
             ("cD: Invalid M=" + std::to_string(a_M) + " or AoA=" +
-             std::to_string(double(a_AoA)));
+             std::to_string(a_AoA.Magnitude()));
 
     double cL1 = 0.0;
 
@@ -133,7 +133,7 @@ namespace SpaceBallistics::LVAeroDyn
     default: ;
     }
     assert(cL1 >= 0.0);
-    return cL1 * double(a_AoA);
+    return cL1 * a_AoA.Magnitude();
   }
 }
 // End namespace SpaceBallistics::LVAeroDyn`

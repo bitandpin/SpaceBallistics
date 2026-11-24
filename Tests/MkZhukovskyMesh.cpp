@@ -203,7 +203,7 @@ int main(int argc, char* argv[])
 
     // Physical thickness of the Turbulent Boundary Layer (as computed with the
     // given "yPlus"):
-    hB = 8.7706 * yPlus * ((nu / Uoo).IPow<13>() * Chord).RPow<1,14>();
+    hB = 8.7706 * yPlus * RPow<1,14>(IPow<13>(nu / Uoo) * Chord);
 
     // Then the max thickness of the inner-most mesh layer is @ phi=Pi/2, and
     // is equal to (a0/b0) * da, where  "da" is the thickness @ phi=0.  Thus,

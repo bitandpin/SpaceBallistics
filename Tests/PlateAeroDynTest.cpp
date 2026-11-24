@@ -26,7 +26,8 @@ int main(int argc, char* argv[])
   double sinAlpha = Sin(alpha);
   double cosAlpha = Cos(alpha);
   DimLessV<ECOS>       n
-    { TT::UnDef(), TT::UnDef(), sinAlpha, cosAlpha, 0.0  };
+    { TT::UnDef(), TT::UnDef(), DimLess(sinAlpha), DimLess(cosAlpha),
+      DimLess(0.0) };
 
   // Assume there is no wind:
   constexpr VelV<ECOS> w
@@ -52,8 +53,8 @@ int main(int argc, char* argv[])
 
     // And the approximate "cR" from a linearised model, for small "alpha",
     // in the supersonic case only:
-    double cLappr     = (M > 1.4) ? double(alpha) * 4.0 / SqRt(M2 - 1.0) : cL;
-    double cDappr     = (M > 1.4) ? double(alpha) * cLappr               : cD;
+    double cLappr     = (M > 1.4) ? alpha.Magnitude() * 4.0 / SqRt(M2 - 1.0) : cL;
+    double cDappr     = (M > 1.4) ? alpha.Magnitude() * cLappr               : cD;
 
     cout << M      << '\t' << cR     << '\t'
          << cL     << '\t' << cD     << '\t'
